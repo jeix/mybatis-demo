@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis3.mappers.BookMapper">
+	
+	<resultMap id="book_result" type="Book">
+		<id property="id" column="id"/>
+		<result property="isbn" column="isbn"/>
+		<result property="title" column="title"/>
+		<result property="published_on" column="published_on"/>
+	</resultMap>
+	<select id="find_all_book_list" resultMap="book_result">
+		SELECT id, isbn, title, published_on
+		FROM books a
+	</select>
+	
+	<resultMap id="book_with_publisher_result" type="Book" extends="book_result">
+		<result property="publisher.name" column="publisher_name"/>
+	</resultMap>
+	<select id="find_book_list_by_publisher_id" parameterType="int" resultMap="book_with_publisher_result">
+		SELECT b.id, b.isbn, b.title, b.published_on, p.name publisher_name
+		FROM books b, publishers p
+		WHERE b.publisher_id = #{publisher_id}
+		AND b.publisher_id = p.id
+	</select>
+	
+	<select id="find_book_list_by_author_id" parameterType="int" resultType="map">
+		SELECT b.id, b.isbn, b.title, b.published_on
+		FROM books b, books_authors ba
+		WHERE b.id = ba.book_id
+		AND ba.author_id = #{author_id}
+	</select>
+	
+	<resultMap id="publisher_result" type="Publisher">
+		<id property="id" column="publisher_id"/>
+		<result property="name" column="publisher_name"/>
+		<result property="phone_number" column="phone_number"/>
+	</resultMap>
+	<select id="_find_publisher_by_id" parameterType="int" resultMap="publisher_result">
+		SELECT id publisher_id, name publisher_name, phone_number
+		FROM publishers
+		WHERE id = #{id}
+	</select>
+	
+	<resultMap id="book_detail_result_1" type="Book">
+		<id property="id" column="id"/>
+		<result property="isbn" column="isbn"/>
+		<result property="title" column="title"/>
+		<result property="published_on" column="published_on"/>
+		<association property="publisher" resultMap="publisher_result"/>
+	</resultMap>
+	<select id="find_book_by_id_1" parameterType="int" resultMap="book_detail_result_1">
+		SELECT b.id, b.isbn, b.title, b.published_on,
+			p.id publisher_id, p.name publisher_name, p.phone_number
+		FROM books b, publishers p
+		WHERE b.id = #{id}
+		AND b.publisher_id = p.id
+	</select>
+	
+	<resultMap id="book_detail_result_2" type="Book">
+		<id property="id" column="id"/>
+		<result property="isbn" column="isbn"/>
+		<result property="title" column="title"/>
+		<result property="published_on" column="published_on"/>
+		<association property="publisher" javaType="Publisher">
+			<id property="id" column="publisher_id"/>
+			<result property="name" column="publisher_name"/>
+			<result property="phone_number" column="phone_number"/>
+		</association>
+	</resultMap>
+	<select id="find_book_by_id_2" parameterType="int" resultMap="book_detail_result_2">
+		SELECT b.id, b.isbn, b.title, b.published_on,
+			p.id publisher_id, p.name publisher_name, p.phone_number
+		FROM books b, publishers p
+		WHERE b.id = #{id}
+		AND b.publisher_id = p.id
+	</select>
+	
+	<resultMap id="book_detail_result_3" type="Book">
+		<id property="id" column="id"/>
+		<result property="isbn" column="isbn"/>
+		<result property="title" column="title"/>
+		<result property="published_on" column="published_on"/>
+		<association property="publisher" column="publisher_id" select="_find_publisher_by_id"/>
+	</resultMap>
+	<select id="find_book_by_id_3" parameterType="int" resultMap="book_detail_result_3">
+		SELECT id, isbn, title, published_on, publisher_id
+		FROM books
+		WHERE id = #{id}
+	</select>
+	
+	<resultMap id="author_result" type="Author">
+		<id property="id" column="author_id"/>
+		<result property="name" column="author_name"/>
+		<result property="email" column="email"/>
+	</resultMap>
+	<select id="_find_author_by_id" parameterType="int" resultMap="author_result">
+		SELECT id author_id, name author_name, email
+		FROM authors
+		WHERE id = #{id}
+	</select>
+	<select id="_find_author_by_book_id" parameterType="int" resultMap="author_result">
+		SELECT a.id author_id, a.name author_name, a.email
+		FROM books b
+			LEFT OUTER JOIN books_authors ba ON b.id = ba.book_id
+			LEFT OUTER JOIN authors a ON ba.author_id = a.id
+		WHERE b.id = #{book_id}
+	</select>
+	
+	<resultMap id="book_detail_result_4" type="Book">
+		<id property="id" column="id"/>
+		<result property="isbn" column="isbn"/>
+		<result property="title" column="title"/>
+		<result property="published_on" column="published_on"/>
+		<association property="publisher" resultMap="publisher_result"/>
+		<collection property="author_list" resultMap="author_result"/>
+	</resultMap>
+	<select id="find_book_by_id_4" parameterType="int" resultMap="book_detail_result_4">
+		SELECT b.id, b.isbn, b.title, b.published_on,
+			p.id publisher_id, p.name publisher_name, p.phone_number,
+			a.id author_id, a.name author_name, a.email
+		FROM books b
+			LEFT OUTER JOIN publishers p ON b.publisher_id = p.id
+			LEFT OUTER JOIN books_authors ba ON b.id = ba.book_id
+			LEFT OUTER JOIN authors a ON ba.author_id = a.id
+		WHERE b.id = #{id}
+	</select>
+	
+	<resultMap id="book_detail_result_5" type="Book">
+		<id property="id" column="id"/>
+		<result property="isbn" column="isbn"/>
+		<result property="title" column="title"/>
+		<result property="published_on" column="published_on"/>
+		<association property="publisher" column="publisher_id" select="_find_publisher_by_id"/>
+		<collection property="author_list" column="book_id" select="_find_author_by_book_id"/>
+	</resultMap>
+	<!--
+	<select id="find_book_by_id_5" parameterType="int" resultMap="book_detail_result_5">
+		SELECT b.id, b.isbn, b.title, b.published_on, b.publisher_id, ba.author_id
+		FROM books b LEFT OUTER JOIN books_authors ba ON b.id = ba.book_id
+		WHERE b.id = #{id}
+	</select>
+	-->
+	<select id="find_book_by_id_5" parameterType="int" resultMap="book_detail_result_5">
+		SELECT b.id, b.isbn, b.title, b.published_on, b.publisher_id, b.id book_id
+		FROM books b
+		WHERE b.id = #{id}
+	</select>
+	
+	<select id="find_book_list_by_author_id_and_more" parameterType="map" resultType="Book">
+		SELECT b.id, b.isbn, b.title, b.published_on
+		FROM books b, books_authors ba
+		WHERE b.id = ba.book_id
+		AND ba.author_id = #{author_id}
+		<if test="title != null">
+			AND b.title LIKE #{title}
+		</if>
+	</select>
+	
+	<select id="find_book_list_by_author_id_or_publisher_id" parameterType="map" resultType="Book">
+		SELECT b.id, b.isbn, b.title, b.published_on
+		FROM books b
+		<choose>
+			<when test="search_by == 'author'">
+				LEFT OUTER JOIN books_authors ba ON b.id = ba.book_id
+				WHERE ba.author_id = #{author_id}
+			</when>
+			<when test="search_by == 'publisher'">
+				WHERE b.publisher_id = #{publisher_id}
+			</when>
+			<otherwise>
+				WHERE b.published_on &gt; date('2014-03-01')
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="find_book_list_by_publisher_id_or_title_1" parameterType="map" resultType="Book">
+		SELECT b.id, b.isbn, b.title, b.published_on
+		FROM books b
+		<where>
+			<if test="publisher_id != null">
+				b.publisher_id = #{publisher_id}
+			</if>
+			<if test="title != null">
+				AND b.title LIKE #{title}
+			</if>
+		</where>
+	</select>
+	
+	<select id="find_book_list_by_publisher_id_or_title_2" parameterType="map" resultType="Book">
+		SELECT b.id, b.isbn, b.title, b.published_on
+		FROM books b
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="publisher_id != null">
+				b.publisher_id = #{publisher_id}
+			</if>
+			<if test="title != null">
+				AND b.title LIKE #{title}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="find_book_list_by_author_id_list_1" parameterType="map" resultType="Book">
+		SELECT id, isbn, title, published_on
+		FROM books b
+		WHERE id IN (
+			SELECT book_id
+			FROM books_authors ba
+			<if test="author_id_list != null">
+				<where>
+					<foreach item="author_id" collection="author_id_list">
+						OR ba.author_id = #{author_id}
+					</foreach>
+				</where>
+			</if>
+		)
+	</select>
+	
+	<select id="find_book_list_by_author_id_list_2" parameterType="map" resultType="Book">
+		SELECT id, isbn, title, published_on
+		FROM books b
+		WHERE id IN (
+			SELECT book_id
+			FROM books_authors ba
+			<if test="author_id_list != null">
+				<where>
+					ba.author_id IN
+					<foreach item="author_id" collection="author_id_list" open="(" separator="," close=")">
+						#{author_id}
+					</foreach>
+				</where>
+			</if>
+		)
+	</select>
+	
+	<insert id="insert_book" parameterType="Book" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO books (
+			isbn, title, publisher_id, published_on
+		) VALUES (
+			#{isbn}, #{title}, #{publisher.id}, #{published_on}
+		)
+	</insert>
+	<!--
+	insert_book_author
+	-->
+	<update id="update_book" parameterType="Book">
+		UPDATE books
+		SET isbn = #{isbn}, title = #{title},
+			publisher_id = #{publisher.id}, published_on = #{published_on}
+		WHERE id = #{id}
+	</update>
+	<update id="update_book_alt" parameterType="Book">
+		UPDATE books
+		<set>
+			<if test="isbn != null">isbn = #{isbn},</if>
+			<if test="title != null">title = #{title},</if>
+			<if test="publisher != null">publisher_id = #{publisher.id},</if>
+			<if test="published_on != null">published_on = #{published_on},</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--
+	delete_book_author
+	-->
+	<delete id="delete_book" parameterType="int">
+		DELETE FROM books
+		WHERE id = #{id}
+	</delete>
+</mapper>

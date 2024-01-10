@@ -1,0 +1,15 @@
+
+<select|insert id="..." ...>
+	...
+	<include refid="..."/>
+	...
+</select|insert>
+
+<sql id="...">
+	WITH
+		PARAM(x,y,z) AS (VALUES (CAST(#xxx# AS CHAR(5)), CAST(#yyy# AS CHAR(10)), CAST(#zzz# AS INTEGER))),
+		alias AS (SELECT ... FROM ... WHERE ...),
+		...
+		alias AS (SELECT ... FROM ... WHERE ...)
+	SELECT ... FROM ... WHERE ...
+</sql>

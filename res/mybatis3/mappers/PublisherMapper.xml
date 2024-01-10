@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis3.mappers.PublisherMapper">
+	<select id="find_all_publisher_list" resultType="Publisher">
+		SELECT id, name, phone_number
+		FROM publishers
+	</select>
+	<select id="find_publisher_by_id" parameterType="int" resultType="Publisher">
+		SELECT id, name, phone_number
+		FROM publishers
+		WHERE id = #{id}
+	</select>
+	<insert id="insert_publisher" parameterType="Publisher" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO publishers (name, phone_number) VALUES (#{name}, #{phone_number})
+	</insert>
+	<update id="update_publisher" parameterType="Publisher">
+		UPDATE publishers
+		SET name = #{name}, phone_number = #{phone_number}
+		WHERE id = #{id}
+	</update>
+	<delete id="delete_publisher" parameterType="int">
+		DELETE FROM publishers
+		WHERE id = #{id}
+	</delete>
+</mapper>

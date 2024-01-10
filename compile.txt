@@ -1,0 +1,90 @@
+
+################################################################################
+# Linux
+
+mkdir bin
+mkdir bin/main
+mkdir bin/test
+
+javac -cp "bin/main" -d bin/main src/mybatis3/domain/*.java
+javac -cp "bin/main" -d bin/main src/mybatis3/mappers/*.java
+javac -cp "bin/main:lib/mybatis-3.2.7.jar" -d bin/main src/mybatis3/mappers/ann/sql/*.java
+javac -cp "bin/main:lib/mybatis-3.2.7.jar" -d bin/main src/mybatis3/mappers/ann/*.java
+javac -cp "bin/main:lib/mybatis-3.2.7.jar" -d bin/main src/mybatis3/mappers/map/*.java
+javac -cp "bin/main:lib/mybatis-3.2.7.jar" -d bin/main src/mybatis3/util/*.java
+javac -cp "bin/main:lib/mybatis-3.2.7.jar:lib/slf4j-api-1.7.5.jar" -d bin/main src/mybatis3/services/*.java
+javac -cp "bin/main:lib/mybatis-3.2.7.jar:lib/slf4j-api-1.7.5.jar" -d bin/main src/mybatis3/services/ann/*.java
+javac -cp "bin/main:lib/mybatis-3.2.7.jar:lib/slf4j-api-1.7.5.jar" -d bin/main src/mybatis3/services/map/*.java
+
+cp res/*.properties bin/main
+cp res/*.xml bin/main
+cp res/mybatis3/mappers/*.xml bin/main/mybatis3/mappers
+cp res/mybatis3/mappers/map/*.xml bin/main/mybatis3/mappers/map
+
+javac -cp "bin/main:bin/test:lib/junit-4.11.jar" -d bin/test test/mybatis3/services/*.java
+javac -cp "bin/main:bin/test:lib/junit-4.11.jar" -d bin/test test/mybatis3/services/ann/*.java
+javac -cp "bin/main:bin/test:lib/junit-4.11.jar" -d bin/test test/mybatis3/services/map/*.java
+
+################################################################################
+# Windows
+
+########################################
+# Command Prompt
+
+rmdir /s /q bin
+
+mkdir bin
+mkdir bin\main
+mkdir bin\test
+
+javac -cp "bin\main" -d bin\main src\mybatis3\domain\*.java
+javac -cp "bin\main" -d bin\main src\mybatis3\domain\map\*.java
+javac -cp "bin\main" -d bin\main src\mybatis3\mappers\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar" -d bin\main src\mybatis3\mappers\ann\sql\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar" -d bin\main src\mybatis3\mappers\ann\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar" -d bin\main src\mybatis3\mappers\map\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar" -d bin\main src\mybatis3\util\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar;lib\slf4j-api-1.7.5.jar" -d bin\main src\mybatis3\services\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar;lib\slf4j-api-1.7.5.jar" -d bin\main src\mybatis3\services\ann\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar;lib\slf4j-api-1.7.5.jar" -d bin\main src\mybatis3\services\map\*.java
+
+copy /y res\*.properties bin\main
+copy /y res\*.xml bin\main
+copy /y res\mybatis3\mappers\*.xml bin\main\mybatis3\mappers
+copy /y res\mybatis3\mappers\map\*.xml bin\main\mybatis3\mappers\map
+
+javac -cp "bin\main;bin\test;lib\junit-4.11.jar" -d bin\test test\mybatis3\services\*.java
+javac -cp "bin\main;bin\test;lib\junit-4.11.jar" -d bin\test test\mybatis3\services\ann\*.java
+javac -cp "bin\main;bin\test;lib\junit-4.11.jar" -d bin\test test\mybatis3\services\map\*.java
+
+########################################
+# PowerShell
+
+rm -r -fo bin
+
+mkdir bin
+mkdir bin\main
+mkdir bin\test
+
+javac -cp "bin\main" -d bin\main src\mybatis3\domain\*.java
+javac -cp "bin\main" -d bin\main src\mybatis3\domain\map\*.java
+javac -cp "bin\main" -d bin\main src\mybatis3\mappers\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar" -d bin\main src\mybatis3\mappers\ann\sql\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar" -d bin\main src\mybatis3\mappers\ann\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar" -d bin\main src\mybatis3\mappers\map\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar" -d bin\main src\mybatis3\util\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar;lib\slf4j-api-1.7.5.jar" -d bin\main src\mybatis3\services\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar;lib\slf4j-api-1.7.5.jar" -d bin\main src\mybatis3\services\ann\*.java
+javac -cp "bin\main;lib\mybatis-3.2.7.jar;lib\slf4j-api-1.7.5.jar" -d bin\main src\mybatis3\services\map\*.java
+
+cp res\*.properties bin\main
+cp res\*.xml bin\main
+cp res\mybatis3\mappers\*.xml bin\main\mybatis3\mappers
+cp res\mybatis3\mappers\map\*.xml bin\main\mybatis3\mappers\map
+
+javac -cp "bin\main;bin\test;lib\junit-4.11.jar" -d bin\test test\mybatis3\services\*.java
+javac -cp "bin\main;bin\test;lib\junit-4.11.jar" -d bin\test test\mybatis3\services\ann\*.java
+javac -cp "bin\main;bin\test;lib\junit-4.11.jar" -d bin\test test\mybatis3\services\map\*.java
+
+################################################################################
+:wq

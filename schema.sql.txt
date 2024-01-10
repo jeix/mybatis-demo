@@ -1,0 +1,80 @@
+
+drop table if exists publishers;
+
+create table publishers (
+  id integer primary key,
+  name text,
+  phone_number text
+);
+
+insert into publishers (name, phone_number) values ('zzz', '123-4567');
+insert into publishers (name, phone_number) values ('xxx', '234-5678');
+insert into publishers (name, phone_number) values ('ccc', '345-6789');
+
+drop table if exists authors;
+
+create table authors (
+  id integer primary key,
+  name text,
+  email text
+);
+
+insert into authors (name, email) values ('qqq', 'qqq@somenet.com');
+insert into authors (name, email) values ('www', 'www@somenet.com');
+insert into authors (name, email) values ('eee', 'eee@somenet.com');
+
+drop table if exists books;
+
+create table books (
+  id integer primary key,
+  isbn text,
+  title text,
+  publisher_id integer,
+  published_on text
+);
+
+insert into books (isbn, title, publisher_id, published_on) values ('12345', 'aaa', 1, '2013-09-21');
+insert into books (isbn, title, publisher_id, published_on) values ('23456', 'sss', 2, '2013-10-28');
+insert into books (isbn, title, publisher_id, published_on) values ('34567', 'ddd', 3, '2013-11-16');
+insert into books (isbn, title, publisher_id, published_on) values ('45678', 'fff', 1, '2014-03-10');
+insert into books (isbn, title, publisher_id, published_on) values ('56789', 'ggg', 2, '2014-04-18');
+
+drop table if exists books_authors;
+
+create table books_authors (
+  id integer primary key,
+  book_id integer,
+  author_id integer
+);
+
+insert into books_authors (book_id, author_id) values (1, 1);
+insert into books_authors (book_id, author_id) values (1, 3);
+insert into books_authors (book_id, author_id) values (2, 2);
+insert into books_authors (book_id, author_id) values (3, 2);
+insert into books_authors (book_id, author_id) values (4, 1);
+insert into books_authors (book_id, author_id) values (5, 2);
+insert into books_authors (book_id, author_id) values (5, 3);
+
+drop table if exists recursions;
+
+create table recursions (
+  id text,
+  level integer,
+  name text,
+  pid text,
+  sort_order integer
+);
+
+insert into recursions values ('1',  1,'한국',    null,1);
+insert into recursions values ('2',  1,'일본',    null,2);
+insert into recursions values ('3',  1,'홍콩',    null,3);
+insert into recursions values ('11', 2,'서울',    '1', 1);
+insert into recursions values ('12', 2,'부산',    '1', 2);
+insert into recursions values ('21', 2,'도쿄',    '2', 1);
+insert into recursions values ('22', 2,'오사카',  '2', 2);
+insert into recursions values ('111',3,'강동구',  '11',1);
+insert into recursions values ('112',3,'강서구',  '11',2);
+insert into recursions values ('113',3,'노원구',  '11',3);
+insert into recursions values ('121',3,'동래구',  '12',1);
+insert into recursions values ('122',3,'해운대구','12',2);
+insert into recursions values ('211',3,'치요다구','21',1);

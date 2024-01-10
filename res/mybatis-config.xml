@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="Author" type="mybatis3.domain.Author"/>
+		<typeAlias alias="Publisher" type="mybatis3.domain.Publisher"/>
+		<typeAlias alias="Book" type="mybatis3.domain.Book"/>
+		<typeAlias alias="BookMap" type="mybatis3.domain.map.Book"/>
+	</typeAliases>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="org.sqlite.JDBC" />
+				<property name="url" value="jdbc:sqlite:book.db" />
+				<!--
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="mysql://127.0.0.1:3306/dbname" />
+				<property name="username" value="username" />
+				<property name="password" value="password" />
+				-->
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="mybatis3/mappers/AuthorMapper.xml" />
+		<mapper resource="mybatis3/mappers/PublisherMapper.xml" />
+		<mapper resource="mybatis3/mappers/BookMapper.xml" />
+		
+		<mapper resource="mybatis3/mappers/map/AuthorMapper.xml" />
+		<mapper resource="mybatis3/mappers/map/BookMapper.xml" />
+		
+		<mapper class="mybatis3.mappers.ann.AuthorMapper" />
+		<mapper class="mybatis3.mappers.ann.BookMapper" />
+	</mappers>
+</configuration>
